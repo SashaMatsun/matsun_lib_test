@@ -1,11 +1,11 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch
 
 
-class DCGAN_Generator(nn.Module):
+class DCGANGenerator(nn.Module):
     def __init__(self, img_size, latent_dim, channels):
-        super(DCGAN_Generator, self).__init__()
+        super().__init__()
 
         self.init_size = img_size // 4
         self.l1 = nn.Sequential(nn.Linear(latent_dim, 128 * self.init_size ** 2))

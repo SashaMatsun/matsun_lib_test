@@ -1,14 +1,14 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch
 
 
-class DCGAN_Discriminator(nn.Module):
-    def __init__(self, img_size, channels):
-        super(DCGAN_Discriminator, self).__init__()
+class DCGANDiscriminator(nn.Module):
+    def __init__(self, img_size, channels, dropout=0.25):
+        super().__init__()
 
         def discriminator_block(in_filters, out_filters, bn=True):
-            block = [nn.Conv2d(in_filters, out_filters, 3, 2, 1), nn.LeakyReLU(0.2, inplace=True), nn.Dropout2d(0.25)]
+            block = [nn.Conv2d(in_filters, out_filters, 3, 2, 1), nn.LeakyReLU(0.2, inplace=True), nn.Dropout2d(dropout)]
             if bn:
                 block.append(nn.BatchNorm2d(out_filters, 0.8))
             return block
