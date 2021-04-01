@@ -1,2 +1,2 @@
-# gan_lib_test
+# my_gan_lib_test
 just to check how it looks
