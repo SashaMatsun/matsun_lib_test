@@ -1,2 +1,2 @@
 # gan_lib_test
-just check how it looks
+just to check how it looks
