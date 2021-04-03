@@ -7,7 +7,7 @@ from best_gan_lib.generators import P2PGenerator
 from best_gan_lib.discriminators import P2PDiscriminator
 
 
-g = P2PGenerator(64, 128, 3)
+g = CGANGenerator(64, 128, 3, 2)
 d = P2PDiscriminator(64, 3)
 
 model = Model(g, d)

@@ -1,23 +1,18 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from ..utils import downsample_block
 
 
 class DCGANDiscriminator(nn.Module):
     def __init__(self, img_size, channels, dropout=0.25):
         super().__init__()
 
-        def discriminator_block(in_filters, out_filters, bn=True):
-            block = [nn.Conv2d(in_filters, out_filters, 3, 2, 1), nn.LeakyReLU(0.2, inplace=True), nn.Dropout2d(dropout)]
-            if bn:
-                block.append(nn.BatchNorm2d(out_filters, 0.8))
-            return block
-
         self.model = nn.Sequential(
-            *discriminator_block(channels, 16, bn=False),
-            *discriminator_block(16, 32),
-            *discriminator_block(32, 64),
-            *discriminator_block(64, 128),
+            *downsample_block(channels, 16, bn=False, dropout=dropout),
+            *downsample_block(16, 32, dropout=dropout),
+            *downsample_block(32, 64, dropout=dropout),
+            *downsample_block(64, 128, dropout=dropout),
         )
 
         # The height and width of downsampled image

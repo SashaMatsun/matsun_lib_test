@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from ..utils import upsample_block
+
 
 
 class DCGANGenerator(nn.Module):
@@ -12,14 +14,8 @@ class DCGANGenerator(nn.Module):
 
         self.conv_blocks = nn.Sequential(
             nn.BatchNorm2d(128),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(128, 128, 3, stride=1, padding=1),
-            nn.BatchNorm2d(128, 0.8),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(128, 64, 3, stride=1, padding=1),
-            nn.BatchNorm2d(64, 0.8),
-            nn.LeakyReLU(0.2, inplace=True),
+            *upsample_block(128, 128, bn=True),
+            *upsample_block(128, 64, bn=True),
             nn.Conv2d(64, channels, 3, stride=1, padding=1),
             nn.Tanh(),
         )

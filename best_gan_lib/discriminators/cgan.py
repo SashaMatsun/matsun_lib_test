@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from ..utils import downsample_block
 
 
 class CGANDiscriminator(nn.Module):
@@ -10,17 +11,11 @@ class CGANDiscriminator(nn.Module):
         self.label_emb = nn.Embedding(n_classes, n_classes)
         self.label_l = nn.Linear(n_classes, img_size ** 2)
 
-        def discriminator_block(in_filters, out_filters, bn=True):
-            block = [nn.Conv2d(in_filters, out_filters, 3, 2, 1), nn.LeakyReLU(0.2, inplace=True), nn.Dropout2d(dropout)]
-            if bn:
-                block.append(nn.BatchNorm2d(out_filters, 0.8))
-            return block
-
         self.model = nn.Sequential(
-            *discriminator_block(channels + 1, 16, bn=False),
-            *discriminator_block(16, 32),
-            *discriminator_block(32, 64),
-            *discriminator_block(64, 128),
+            *downsample_block(channels + 1, 16, bn=False, dropout=dropout),
+            *downsample_block(16, 32, dropout=dropout),
+            *downsample_block(32, 64, dropout=dropout),
+            *downsample_block(64, 128, dropout=dropout),
         )
 
         # The height and width of downsampled image
@@ -30,7 +25,7 @@ class CGANDiscriminator(nn.Module):
     def forward(self, img, label):
         l_in = self.label_emb(label)
         l_in = self.label_l(l_in)
-        l_in = l_in.view((l_in.size[0], 1, img_size, img_size))
+        l_in = l_in.view((l_in.size[0], 1, img.size[2], img.size[3]))
         img = torch.cat((img, l_in), 1)
         out = self.model(img)
         out = out.view(out.shape[0], -1)
