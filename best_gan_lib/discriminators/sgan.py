@@ -19,7 +19,7 @@ class SGANDiscriminator(nn.Module):
         ds_size = img_size // 2 ** 4
 
         # Output layers
-        self.adv_layer = nn.Sequential(nn.Linear(128 * ds_size ** 2, 1))
+        self.adv_layer = nn.Sequential(nn.Linear(128 * ds_size ** 2, 1), nn.Sigmoid())
         self.aux_layer = nn.Sequential(nn.Linear(128 * ds_size ** 2, n_classes + 1), nn.Softmax())
 
     def forward(self, img):

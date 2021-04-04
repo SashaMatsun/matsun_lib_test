@@ -14,8 +14,7 @@ class DCGANDiscriminator(nn.Module):
             *downsample_block(32, 64, dropout=dropout),
             *downsample_block(64, 128, dropout=dropout),
         )
-
-        # The height and width of downsampled image
+        
         ds_size = img_size // 2 ** 4
         self.adv_layer = nn.Sequential(nn.Linear(128 * ds_size ** 2, 1), nn.Sigmoid())
 
