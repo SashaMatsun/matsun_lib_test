@@ -1,14 +1,14 @@
-from best_gan_lib import Model
-from best_gan_lib.generators import DCGANGenerator
-from best_gan_lib.discriminators import DCGANDiscriminator
-from best_gan_lib.generators import CGANGenerator
-from best_gan_lib.discriminators import CGANDiscriminator
-from best_gan_lib.generators import P2PGenerator
-from best_gan_lib.discriminators import P2PDiscriminator
-from best_gan_lib.discriminators import InfoGANDiscriminator
-from best_gan_lib.discriminators import BEGANDiscriminator
-from best_gan_lib.generators import SAGANGenerator
-from best_gan_lib.discriminators import SAGANDiscriminator
+from torch_gan import Model
+from torch_gan.generators import DCGANGenerator
+from torch_gan.discriminators import DCGANDiscriminator
+from torch_gan.generators import CGANGenerator
+from torch_gan.discriminators import CGANDiscriminator
+from torch_gan.generators import P2PGenerator
+from torch_gan.discriminators import P2PDiscriminator
+from torch_gan.discriminators import InfoGANDiscriminator
+from torch_gan.discriminators import BEGANDiscriminator
+from torch_gan.generators import SAGANGenerator
+from torch_gan.discriminators import SAGANDiscriminator
 
 
 g = SAGANGenerator(64, 128, 3)
