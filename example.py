@@ -9,6 +9,7 @@ from torch_gan.discriminators import InfoGANDiscriminator
 from torch_gan.discriminators import BEGANDiscriminator
 from torch_gan.generators import SAGANGenerator
 from torch_gan.discriminators import SAGANDiscriminator
+from torch_gan.generators import ProGANGenerator
 
 
 g = SAGANGenerator(64, 128, 3)
