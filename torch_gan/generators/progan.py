@@ -71,9 +71,15 @@ class ProGANGenerator(nn.Module):
         self.depth = int(np.log2(fin_size / 4))
         
         self.init_block = GenInitBlock(latent_dim, 64)
-        self.general_blocks = [GenGeneralBlock(64, 64) for i in range(self.depth)]
+        self.general_blocks = nn.ModuleList()
+        for i in range(self.depth):
+            self.general_blocks.append(GenGeneralBlock(64, 64))
 
-        self.to_RGB_list = [nn.Conv2d(64, 3, (1,1)) for i in range(self.depth + 1)]
+        self.to_RGB_list = nn.ModuleList()
+        for i in range(self.depth + 1):
+            self.to_RGB_list.append(nn.Conv2d(64, channels, (1,1)))
+
+        self.tan_hyp = nn.Tanh()
 
     def forward(self, x, curr_size, alpha):
         y = self.init_block(x)
@@ -92,4 +98,5 @@ class ProGANGenerator(nn.Module):
             y_res = F.interpolate(y_res, scale_factor=2)
             y = y * alpha + y_res * (1.0 - alpha)
 
+        y = self.tan_hyp(y)
         return y

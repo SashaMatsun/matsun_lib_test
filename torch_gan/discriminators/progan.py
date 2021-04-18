@@ -49,8 +49,14 @@ class ProGANDiscriminator(nn.Module):
 
         self.depth = int(np.log2(img_size / 4))
 
-        self.from_RGB_list = [nn.Conv2d(3, 64, (1,1)) for i in range(self.depth + 1)]
-        self.general_blocks = [DisGeneralBlock(64, 64) for i in range(self.depth)]
+        self.from_RGB_list = nn.ModuleList()
+        for i in range(self.depth + 1):
+            self.from_RGB_list.append(nn.Conv2d(channels, 64, (1,1)))
+
+        self.general_blocks = nn.ModuleList()
+        for i in range(self.depth):
+            self.general_blocks.append(DisGeneralBlock(64, 64))
+
         self.fin_block = DisFinBlock(64)
 
     def forward(self, x, curr_size, alpha):
@@ -75,4 +81,4 @@ class ProGANDiscriminator(nn.Module):
             y = self.general_blocks[i](y)
 
         y = self.fin_block(y)
-        return y
+        return y.view(-1)
